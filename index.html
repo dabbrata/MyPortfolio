@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dabbrata Das — Research Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f14;
+      --bg2: #13161e;
+      --bg3: #1a1e2a;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.15);
+      --text: #e8e4dc;
+      --text-muted: #8a8680;
+      --text-dim: #5a5652;
+      --border: rgba(201,168,76,0.18);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'DM Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 256px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 3.5rem;
+      background: rgba(13,15,20,0.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.4rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 7rem 3.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+    }
+
+    .hero-bg-circle-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%);
+      top: -100px; right: -100px;
+    }
+
+    .hero-bg-circle-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(100,120,200,0.06), transparent 70%);
+      bottom: 0; left: -80px;
+    }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.1s forwards;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 2.5rem; height: 1px;
+      background: var(--gold);
+    }
+
+    h1.hero-name {
+      font-family: var(--serif);
+      font-size: clamp(3.2rem, 6vw, 5.2rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.25s forwards;
+    }
+
+    h1.hero-name em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-desc {
+      max-width: 480px;
+      text-align: justify;
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 2.4rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.55s forwards;
+    }
+
+    .btn-primary {
+      padding: 0.75rem 2rem;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .btn-outline {
+      padding: 0.75rem 2rem;
+      background: transparent;
+      color: var(--gold);
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.25s, color 0.25s, transform 0.2s;
+    }
+
+    .btn-outline:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+    /* Hero Right — Stats & Visual */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1.2rem;
+      opacity: 0;
+      animation: fadeIn 1s 0.6s forwards;
+    }
+
+    .hero-avatar-wrap {
+      position: relative;
+      width: 280px; height: 340px;
+    }
+
+    .hero-avatar-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--bg3), var(--bg2));
+      border: 1px solid var(--border);
+    }
+
+    .hero-avatar-bg::before {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border: 1px solid var(--gold-dim);
+    }
+
+    .hero-avatar-initials {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .initials-text {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 600;
+      color: var(--gold);
+      opacity: 0.35;
+      line-height: 1; 
+      transform: translateY(-40px);
+    }
+
+    .initials-line {
+      width: 60px; height: 1px;
+      background: var(--gold);
+      opacity: 0.3;
+      margin: 0.6rem 0;
+      transform: translateY(-40px);
+    }
+
+    .initials-role {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      transform: translateY(-40px);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      width: 280px;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 1rem 1.2rem;
+    }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 0.3rem;
+    }
+
+    /* ── SHARED SECTION STYLES ── */
+    section { padding: 6rem 3.5rem; }
+
+    .section-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-eyebrow::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .section-title em { font-style: italic; color: var(--gold-light); }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      max-width: 520px;
+      font-size: 0.95rem;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.9;
+      margin-bottom: 1.4rem;
+      text-align: justify;
+    }
+
+    .about-text p strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .about-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .highlight-item {
+      padding: 1.3rem 1.5rem;
+      background: var(--bg3);
+      border-left: 2px solid var(--gold);
+    }
+
+    .highlight-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .highlight-value {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    /* ── RESEARCH ── */
+    #research { }
+
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--border);
+    }
+
+    .research-card {
+      background: var(--bg);
+      padding: 2.4rem 2rem;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .research-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.35s;
+      transform-origin: left;
+    }
+
+    .research-card:hover { background: var(--bg2); }
+    .research-card:hover::before { transform: scaleX(1); }
+
+    .research-icon {
+      width: 44px; height: 44px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.4rem;
+      font-size: 1rem;
+      color: var(--gold);
+    }
+
+    .research-icon svg { width: 20px; height: 20px; fill: none; stroke: var(--gold); stroke-width: 1.5; }
+
+    .research-card h3 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+    }
+
+    .research-card p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      line-height: 1.75;
+    }
+
+    .research-tag {
+      display: inline-block;
+      margin-top: 1.4rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      padding: 0.3rem 0.7rem;
+    }
+
+    /* ── PUBLICATIONS ── */
+    #publications { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .pub-list { display: flex; flex-direction: column; }
+
+    .pub-item {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.25s;
+      position: relative;
+    }
+
+    .pub-item:first-child { border-top: 1px solid var(--border); }
+
+    .pub-year {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--gold);
+      padding-top: 0.2rem;
+    }
+
+    .pub-content {}
+
+    .pub-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .pub-authors {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+    }
+
+    .pub-journal {
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .pub-badge {
+      padding: 0.3rem 0.8rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid;
+      white-space: nowrap;
+      align-self: flex-start;
+      margin-top: 0.2rem;
+    }
+
+    .pub-badge.featured { color: var(--gold); border-color: var(--gold); }
+    .pub-badge.published { color: var(--text-dim); border-color: var(--border); }
+
+    /* ── SKILLS ── */
+    #skills {}
+
+    .skills-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .skill-group-title {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skill-item {
+      margin-bottom: 1.4rem;
+    }
+
+    .skill-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .skill-name { font-size: 0.85rem; color: var(--text); font-weight: 400; }
+    .skill-pct { font-family: var(--mono); font-size: 0.72rem; color: var(--gold); }
+
+    .skill-bar {
+      height: 2px;
+      background: var(--bg3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      width: 0;
+      transition: width 1.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      padding: 0.35rem 0.9rem;
+      font-size: 0.75rem;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tag:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-email {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      color: var(--gold-light);
+      text-decoration: none;
+      display: block;
+      margin: 2rem 0;
+      transition: opacity 0.2s;
+    }
+
+    .contact-email:hover { opacity: 0.75; }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2.4rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 0.65rem 1.4rem;
+      transition: color 0.25s, border-color 0.25s;
+    }
+
+    .contact-link:hover { color: var(--gold); border-color: var(--gold); }
+    .contact-link svg { width: 14px; height: 14px; fill: currentColor; }
+
+    @media (max-width: 768px) {
+
+  .contact-inner {
+    max-width: 100%;
+    padding: 0 1.25rem;
+  }
+
+  .contact-email {
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-links {
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .contact-link {
+    flex: 1 1 calc(50% - 1rem);
+    max-width: 180px;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .contact-inner {
+    padding: 0 1rem;
+  }
+
+  .contact-email {
+    font-size: 1.15rem;
+  }
+
+  .contact-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+  }
+
+  .contact-link {
+    width: 100%;
+    max-width: none;
+    justify-content: center;
+    padding: 0.85rem 1rem;
+    font-size: 0.72rem;
+  }
+}
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 3.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── DIVIDER LINE ── */
+    .ornament {
+      text-align: center;
+      padding: 1rem 0;
+      color: var(--gold);
+      opacity: 0.4;
+      font-family: var(--serif);
+      letter-spacing: 0.5em;
+      font-size: 0.7rem;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── HAMBURGER (MOBILE) ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      width: 22px; height: 1px;
+      background: var(--text);
+      display: block;
+      transition: all 0.3s;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      #hero { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-right { align-items: flex-start; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .research-grid { grid-template-columns: 1fr 1fr; }
+      .skills-container { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 4rem 1.5rem; }
+      #hero { padding: 6rem 1.5rem 3rem; }
+      .research-grid { grid-template-columns: 1fr; }
+      .pub-item { grid-template-columns: 50px 1fr; }
+      .pub-badge { display: none; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+
+    /* Mobile nav overlay */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13,15,20,0.97);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .mobile-nav.open { display: flex; }
+
+    .mobile-nav a {
+      font-family: var(--serif);
+      font-size: 2rem;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .mobile-nav a:hover { color: var(--gold); }
+    .mobile-nav-close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">Dabbrata Das</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#skills">Expertise</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="hamburger" id="hamburgerBtn">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="mobileClose">X</button>
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#research" class="mobile-link">Research</a>
+    <a href="#publications" class="mobile-link">Publications</a>
+    <a href="#skills" class="mobile-link">Expertise</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg-circle hero-bg-circle-1"></div>
+    <div class="hero-bg-circle hero-bg-circle-2"></div>
+
+    <div class="hero-left">
+      <div class="hero-tag">PhD Student &amp; Researcher</div>
+      <h1 class="hero-name">Dabbrata<br/><em>Das</em></h1>
+      <p class="hero-desc">
+        Lecturer, Department of CSE, Uttara University, Bangladesh.<br/>
+        I am a PhD applicant and researcher specializing in deep learning, with a focus on privacy and security in intelligent systems. Currently, I am working at the Data Agency and Security (DAS) Lab at George Mason University (GMU), USA.
+      </p>
+      <div class="hero-cta">
+        <a href="#publications" class="btn-primary">View Publications</a>
+        <a href="#contact" class="btn-outline">Get in Touch</a>
+      </div>
+    </div>
+
+
+
+    
+
+      <div class="hero-right">
+        <div class="hero-avatar-wrap">
+          <div class="hero-avatar-bg"></div>
+          <div class="hero-avatar-initials">
+          <div style="display:flex;justify-content:center;align-items:center;flex:1;">
+              <div style="width:165px;height:165px;border-radius:50%;overflow:hidden;border:2px solid #85bea9;box-shadow:0 15px 40px rgba(0,0,0,0.3);">
+                  <img src="img/myself.png"
+                      alt="Dabbrata Das"
+                      style="width:100%;height:100%;object-fit:cover;display:block;">
+              </div>
+          </div>
+          <div class="initials-text">DD</div>
+          <div class="initials-line"></div>
+          <div class="initials-role">Privacy & Security</div>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-number">7</div>
+          <div class="stat-label">Publications</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">28</div>
+          <div class="stat-label">Citations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2</div>
+          <div class="stat-label">Years Active</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Grants Won</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-eyebrow">01 — Background</div>
+    <h2 class="section-title">Building <em>Secure</em><br/>Intelligent Systems</h2>
+    <p class="section-subtitle">Advancing trustworthy artificial intelligence through deep learning, security, privacy, and human-centered computing.</p>
+
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>I am <strong>Dabbrata Das</strong>, a Ph.D. applicant and researcher specializing in <strong>deep learning, intelligent systems, security, and privacy</strong>. I currently serve as a <strong>Lecturer</strong> at Uttara University, Dhaka, Bangladesh, and am affiliated with the <strong>Data Agency and Security (DAS) Lab</strong> at George Mason University.</p>
+
+        <p>I earned my Bachelor's degree in <strong>Computer Science</strong> in 2023, graduating with a <strong>CGPA of 3.64</strong> and ranking <strong>38th</strong> in my department. My research experience spans <strong>Computer Vision, Image Processing, Artificial Intelligence, Machine Learning, and Deep Learning</strong>, with an emphasis on developing robust, secure, and trustworthy intelligent systems.</p>
+
+        <p>Beyond core AI research, my interests extend to <strong>Human-Computer Interaction (HCI), healthcare robotics, cybersecurity, and privacy-preserving intelligent technologies</strong>. I am passionate about designing human-centered AI solutions that address real-world challenges and actively pursue collaborative research and scientific publications.</p>
+      </div>
+
+      <div class="about-highlights">
+        <div class="highlight-item">
+          <div class="highlight-label">Position</div>
+          <div class="highlight-value">Lecturer, Uttara University</div>
+        </div>
+
+        <div class="highlight-item">
+          <div class="highlight-label">Research Affiliation</div>
+          <div class="highlight-value">Data Agency and Security (DAS) Lab, George Mason University</div>
+        </div>
+
+        <div class="highlight-item">
+          <div class="highlight-label">Research Areas</div>
+          <div class="highlight-value">Deep Learning, AI Security, Computer Vision, HCI, Healthcare Robotics</div>
+        </div>
+
+        <div class="highlight-item">
+          <div class="highlight-label">Open to</div>
+          <div class="highlight-value">Research Collaborations, Publications, Academic Partnerships</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ <!-- RESEARCH -->
+<section id="research">
+  <div class="section-eyebrow">02 — Focus Areas</div>
+  <h2 class="section-title">Research <em>Domains</em></h2>
+  <p class="section-subtitle">Developing secure, trustworthy, and human-centered intelligent systems through advances in artificial intelligence, computer vision, and cybersecurity.</p>
+
+  <div class="research-grid reveal">
+
+    <div class="research-card">
+      <div class="research-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <h3>Deep Learning</h3>
+      <p>Designing efficient neural architectures for visual understanding, representation learning, multimodal intelligence, and real-world AI applications.</p>
+      <span class="research-tag">Artificial Intelligence</span>
+    </div>
+
+    <div class="research-card">
+      <div class="research-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12c2.5-4 6-6 10-6s7.5 2 10 6c-2.5 4-6 6-10 6s-7.5-2-10-6z"/></svg>
+      </div>
+      <h3>Computer Vision</h3>
+      <p>Developing robust vision systems for image understanding, scene analysis, monocular depth estimation, object recognition, and visual perception.</p>
+      <span class="research-tag">Vision</span>
+    </div>
+
+    <div class="research-card">
+      <div class="research-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-4z"/><path d="M9.5 12l2 2 4-4"/></svg>
+      </div>
+      <h3>AI Security & Privacy</h3>
+      <p>Building trustworthy AI through secure deep learning, image authentication, adversarial robustness, privacy preservation, and intelligent cyber defense.</p>
+      <span class="research-tag">Cybersecurity</span>
+    </div>
+
+    <div class="research-card">
+      <div class="research-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v3h2a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h2V6a4 4 0 0 1 4-4z"/></svg>
+      </div>
+      <h3>Image Processing</h3>
+      <p>Exploring image enhancement, restoration, encryption, watermarking, and frequency-domain analysis for secure and reliable visual information processing.</p>
+      <span class="research-tag">Image Computing</span>
+    </div>
+
+    <div class="research-card">
+      <div class="research-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2v6"/><circle cx="12" cy="12" r="4"/><path d="M5 20l3-4M19 20l-3-4"/></svg>
+      </div>
+      <h3>Human-Centered AI & HCI</h3>
+      <p>Designing intelligent systems that enhance accessibility, usability, and user trust by integrating human-centered design with AI technologies.</p>
+      <span class="research-tag">Human-Computer Interaction</span>
+    </div>
+
+    <div class="research-card">
+      <div class="research-icon">
+        <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><circle cx="12" cy="8" r="2"/><path d="M8 15h8"/></svg>
+      </div>
+      <h3>Healthcare Robotics</h3>
+      <p>Investigating intelligent robotic systems for healthcare, assistive technologies, and privacy-aware human-robot interaction in real-world environments.</p>
+      <span class="research-tag">Intelligent Robotics</span>
+    </div>
+
+  </div>
+</section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <div class="section-eyebrow">03 — Selected Works</div>
+    <h2 class="section-title">Recent <em>Publications</em></h2>
+    <p class="section-subtitle">Peer-reviewed research in Computer Vision, Deep Learning, AI, security, and privacy.</p>
+
+    <div class="pub-list reveal">
+
+      <div class="pub-item">
+        <div class="pub-year">2025</div>
+        <div class="pub-content">
+          <div class="pub-title"><a href="https://doi.org/10.1016/j.jisa.2025.104322" style="color: #e0c9c9;">A dual-layer image encryption framework using chaotic AES with dynamic S-boxes and steganographic QR codes.</a></div>
+          <div class="pub-authors">Md Rishadul Bayesh, Dabbrata Das, and Md Ahadullah.</div>
+          <div class="pub-journal">Journal of Information Security and Applications (Q1), Elsevier</div>
+        </div>
+        <span class="pub-badge featured">Featured</span>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2025</div>
+        <div class="pub-content">
+          <div class="pub-title"><a href="https://link.springer.com/article/10.1007/s00371-025-03972-z" style="color: #e0c9c9;">Enhanced encoder–decoder architecture for accurate monocular depth estimation.</a></div>
+          <div class="pub-authors">Dabbrata Das, Argho Deb Das, and Farhan Sadaf.</div>
+          <div class="pub-journal">The Visual Computer, Springer (Q2)</div>
+        </div>
+        <span class="pub-badge published">Published</span>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2026</div>
+        <div class="pub-content">
+          <div class="pub-title"><a href="https://www.ndss-symposium.org/wp-content/uploads/ndss26-poster-100.pdf" style="color: #e0c9c9;">Poster: Frequency-Domain Chaotic Watermarking for Image Authentication Against Deepfakes.</a></div>
+          <div class="pub-authors">Dabbrata Das, Kaniz Fatima, Dhiman Goswami, and Sanchari Das.</div>
+          <div class="pub-journal">NDSS 2026 Symposium — Spotlight Paper</div>
+        </div>
+        <span class="pub-badge featured">Spotlight</span>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2025</div>
+        <div class="pub-content">
+          <div class="pub-title"><a href="https://arxiv.org/abs/2508.17877" style="color: #e0c9c9;">Edge-Enhanced Vision Transformer Framework for Accurate AI-Generated Image Detection.</a></div>
+          <div class="pub-authors">Dabbrata Das, Mahshar Yahan, Md Tareq Zaman, and Md Rishadul Bayesh.</div>
+          <div class="pub-journal">Preprint available on arXiv</div>
+        </div>
+        <span class="pub-badge published">Published</span>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2025</div>
+        <div class="pub-content">
+          <div class="pub-title"><a href="https://doi.org/10.48550/arXiv.2504.20976" style="color: #e0c9c9;">Real-Time Wayfinding Assistant for Blind and Low-Vision Users.</a></div>
+          <div class="pub-authors">Dabbrata Das, Argho Deb Das, and Farhan Sadaf.</div>
+          <div class="pub-journal"> Preprint available on arXiv</div>
+        </div>
+        <span class="pub-badge published">Published</span>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2025</div>
+        <div class="pub-content">
+          <div class="pub-title"><a href="https://ieeexplore.ieee.org/document/11171749" style="color: #e0c9c9;">A framework for accurate and efficient image captioning by fusing fine-tuned YOLOv8 and LLMs.</a></div>
+          <div class="pub-authors">Dabbrata Das, Md Rishadul Bayesh, Mohammad Amanul Islam, and Md Asifur Rahman.</div>
+          <div class="pub-journal">In Proceedings of the IEEE International Conference on Quantum Photonics, Artificial Intelligence, and Networking (QPAIN 2025), Rangpur, Bangladesh</div>
+        </div>
+        <span class="pub-badge published">Published</span>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2025</div>
+        <div class="pub-content">
+          <div class="pub-title"><a href="https://ieeexplore.ieee.org/abstract/document/11491692" style="color: #e0c9c9;">BanGaNet: A Lightweight Deep Learning Framework for Bangla Handwritten Text Recognition.</a></div>
+          <div class="pub-authors">Argho Deb Das, Dabbrata Das, and Farhan Sadaf.</div>
+          <div class="pub-journal">In Proceedings of the 28th International Conference on Computer and Information Technology (ICCIT), 2025, Bangladesh</div>
+        </div>
+        <span class="pub-badge published">Published</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-eyebrow">04 — Expertise</div>
+    <h2 class="section-title">Technical <em>Proficiency</em></h2>
+    <p class="section-subtitle">A technical toolkit spanning artificial intelligence, computer vision, deep learning, and software engineering.</p>
+
+    <div class="skills-container reveal">
+      <div>
+        <div class="skill-group-title">Core Skills</div>
+
+        <div class="skill-item" data-pct="95">
+          <div class="skill-meta">
+            <span class="skill-name">Python Programming</span>
+            <span class="skill-pct">95%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+        <div class="skill-item" data-pct="92">
+          <div class="skill-meta">
+            <span class="skill-name">Deep Learning</span>
+            <span class="skill-pct">92%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+        <div class="skill-item" data-pct="90">
+          <div class="skill-meta">
+            <span class="skill-name">Computer Vision</span>
+            <span class="skill-pct">90%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+        <div class="skill-item" data-pct="88">
+          <div class="skill-meta">
+            <span class="skill-name">Machine Learning</span>
+            <span class="skill-pct">88%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+        <div class="skill-item" data-pct="85">
+          <div class="skill-meta">
+            <span class="skill-name">Software Engineering</span>
+            <span class="skill-pct">85%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="skill-group-title">Tools &amp; Technologies</div>
+        <div class="tag-cloud" id="tagCloud">
+          <span class="tag">Python</span>
+          <span class="tag">PyTorch</span>
+          <span class="tag">TensorFlow</span>
+          <span class="tag">Keras</span>
+          <span class="tag">OpenCV</span>
+          <span class="tag">Scikit-learn</span>
+          <span class="tag">NumPy</span>
+          <span class="tag">NLTK</span>
+          <span class="tag">Laravel</span>
+          <span class="tag">Flutter</span>
+          <span class="tag">Android Studio</span>
+          <span class="tag">OpenGL</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">SQLite</span>
+          <span class="tag">Firebase</span>
+          <span class="tag">Oracle</span>
+          <span class="tag">Git</span>
+          <span class="tag">Arduino</span>
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Bootstrap</span>
+          <span class="tag">LaTeX</span>
+          <span class="tag">Figma</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="section-eyebrow" style="justify-content:center;">05 — Say Hello</div>
+      <h2 class="section-title" style="text-align:center;">Let's <em>Collaborate</em></h2>
+      <p class="section-subtitle" style="margin:0 auto 1rem; text-align:center;">
+        I welcome inquiries about research partnerships, speaking engagements, Ph.D. collaborations, and advisory opportunities in artificial intelligence, computer vision, deep learning, security, and privacy.      </p>
+      <a href="mailto:ddas7@gmu.edu" class="contact-email">ddas7@gmu.edu</a>
+      <div class="contact-links">
+        <a href="https://github.com/dabbrata" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/dabbrata-das-422171200" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://scholar.google.com/citations?user=7lWj-bMAAAAJ&hl=en" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          Scholar
+        </a>
+        <a href="https://www.researchgate.net/profile/Dabbrata-Das" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M21 2H3v16h5v4l4-4h9V2zm-10 9V7m4 4V7"/></svg>
+          ResearchGate
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Dabbrata Das — Data Agency and Security (DAS) Lab</span>
+    <span>Firefax, VA — 22030</span>
+  </footer>
+
+  <script>
+    // Hamburger
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileClose = document.getElementById('mobileClose');
+
+
+        // Toggle menu on hamburger click
+    hamburgerBtn.addEventListener('click', () => {
+      mobileNav.classList.toggle('open');
+    });
+
+    // Close menu on close button click
+    mobileClose.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+    });
+    
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => mobileNav.classList.remove('open'));
+    });
+
+    // Intersection observer — reveal on scroll
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // Skill bars — animate when visible
+    const skillItems = document.querySelectorAll('.skill-item');
+    const skillObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const pct = entry.target.dataset.pct;
+          const fill = entry.target.querySelector('.skill-fill');
+          if (fill) {
+            requestAnimationFrame(() => {
+              fill.style.width = pct + '%';
+            });
+          }
+          skillObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    skillItems.forEach(item => skillObserver.observe(item));
+
+    // Smooth nav shrink on scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.style.padding = '0.9rem 3.5rem';
+      } else {
+        navbar.style.padding = '1.4rem 3.5rem';
+      }
+    });
+
+    // Active nav link highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(sec => {
+        const top = sec.offsetTop - 120;
+        if (window.scrollY >= top) current = sec.getAttribute('id');
+      });
+      navLinks.forEach(link => {
+        link.style.color = '';
+        if (link.getAttribute('href') === '#' + current) {
+          link.style.color = 'var(--gold)';
+        }
+      });
+    });
+
+    // Counter animation for stats
+    function animateCounter(el, target, duration = 1400) {
+      let start = 0;
+      const isFloat = target % 1 !== 0;
+      const step = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = eased * target;
+        el.textContent = isFloat ? current.toFixed(1) : Math.floor(current);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = isFloat ? target.toFixed(1) : target;
+      };
+      requestAnimationFrame(step);
+    }
+
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const text = entry.target.textContent;
+          const isK = text.includes('k');
+          const raw = parseFloat(text.replace('k', ''));
+          if (isK) {
+            animateCounter(entry.target, raw, 1200);
+            const observer = () => entry.target.textContent = raw.toFixed(1) + 'k';
+            setTimeout(observer, 1250);
+          } else {
+            animateCounter(entry.target, raw, 1200);
+          }
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    statNumbers.forEach(el => statsObserver.observe(el));
+  </script>
+</body>
+</html>
